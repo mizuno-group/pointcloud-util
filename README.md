@@ -1,22 +1,12 @@
-# リポジトリ名
-pythonパッケージのためのtemplate repository  
-
-# ！最初にやること！
-- READMEの変更  
-    - repository nameの変更  
-    - Authorsの追記  
-    - Contactの追記  
-- module内の変更  
-    - 直下の__init__.pyのversionを適宜変更  
-    - setup.py冒頭のdescriptionを更新  
-    - setup.py冒頭のpython versionを確認  
+# pointcloud-util
+a repository for pointclound handling  
 
 # Note
 This repository is under construction and will be officially released by [Mizuno group](https://github.com/mizuno-group).  
 Please contact tadahaya[at]gmail.com before publishing your paper using the contents of this repository.  
 
 ## Install
-- ``` pip install git+{URL OF THIS GITHUB REPOSITORY}@{BRANCH NAME} ```  
+- ``` pip install git+https://github.com/mizuno-group/pointcloud-util.git ```  
 - In the development stage, it may be helpful to add ``` --force-reinstall ``` option  
 
 ## Organization
@@ -44,13 +34,10 @@ Please contact tadahaya[at]gmail.com before publishing your paper using the cont
 ------------
 
 ## Authors
-- [YOUR NAME](LINK OF YOUR GITHUB PAGE)  
-    - main contributor  
 - [Tadahaya Mizuno](https://github.com/tadahayamiz)  
     - correspondence  
 
 ## Contact
 If you have any questions or comments, please feel free to create an issue on github here, or email us:  
-- YOUR ADDRESS  
 - tadahaya[at]gmail.com  
     - lead contact  
