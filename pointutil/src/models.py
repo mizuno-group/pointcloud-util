@@ -62,7 +62,7 @@ class DPGMMFeatureExtractor:
         self.model.fit(X)
         return self
 
-    def transform(self, X, only_significant=True):
+    def transform(self, X, aggregation=["mean"], only_significant=True):
         """
         Compute cluster responsibility vectors as features for input data.
 
@@ -70,6 +70,12 @@ class DPGMMFeatureExtractor:
         ----------
         X : np.ndarray of shape (n_samples, n_features)
             Input data points.
+
+        aggregation : list of str, default=["mean"]
+            aggregation methods to apply to the cluster responsibilities.
+            mean, std, entropy, or combination of these.
+            if multiple methods are provided, the concatenated features are returned.
+            the order is mean, std, then entropy
 
         only_significant : bool, default=False
             If True, returns responsibility only for clusters whose weight exceeds effective_threshold.
@@ -82,21 +88,27 @@ class DPGMMFeatureExtractor:
         """
         if self.model is None:
             raise RuntimeError("The model must be fitted before calling transform().")
-
         responsibilities = self.model.predict_proba(X)
-
         if only_significant:
             significant_clusters = self.model.weights_ > self.effective_threshold
             responsibilities = responsibilities[:, significant_clusters]
-
             # Renormalize responsibilities to sum to 1 for each sample
             sum_responsibilities = responsibilities.sum(axis=1, keepdims=True)
-            
             # Avoid division by zero
             sum_responsibilities[sum_responsibilities == 0] = 1.0
             responsibilities = responsibilities / sum_responsibilities
+        features = []
+        if "mean" in aggregation:
+            mean_features = responsibilities.mean(axis=0)
+            features.append(mean_features)
+        if "std" in aggregation:
+            std_features = responsibilities.std(axis=0)
+            features.append(std_features)
+        if "entropy" in aggregation:
+            entropy_features = -np.sum(responsibilities * np.log(responsibilities + 1e-8), axis=1)
+            features.append([np.mean(entropy_features)])
+        return np.concatenate(features)
 
-        return responsibilities
 
     def extract_global_features(self):
         """
