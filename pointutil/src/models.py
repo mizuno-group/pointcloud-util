@@ -30,10 +30,14 @@ class DPGMMFeatureExtractor:
     random_state : int, default=42
         Random seed for reproducibility.
     """
-    def __init__(self, max_components=10, weight_concentration_prior=0.1, effective_threshold=0.01, random_state=42):
+    def __init__(
+            self, max_components=10, weight_concentration_prior=0.1, effective_threshold=0.01,
+            max_iter=1000, random_state=42
+            ):
         self.max_components = max_components
         self.weight_concentration_prior = weight_concentration_prior
         self.effective_threshold = effective_threshold
+        self.max_iter = max_iter
         self.random_state = random_state
         self.model = None
 
@@ -56,7 +60,7 @@ class DPGMMFeatureExtractor:
             covariance_type='full',
             weight_concentration_prior_type='dirichlet_process',
             weight_concentration_prior=self.weight_concentration_prior,
-            max_iter=1000,
+            max_iter=self.max_iter,
             random_state=self.random_state
         )
         self.model.fit(X)
